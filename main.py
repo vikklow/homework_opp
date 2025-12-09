@@ -18,7 +18,8 @@ class Lecturer(Mentor):
 
     def __str__(self):
         base_info = super().__str__()
-        return f"{base_info}\nСредняя оценка за лекции: {self.average_grade:.1f}"
+        return (f"{base_info}\nСредняя оценка за лекции: "
+                f"{self.average_grade:.1f}")
 
     def __lt__(self, other):
         if isinstance(other, Lecturer):
@@ -54,7 +55,9 @@ class Lecturer(Mentor):
         for course_grades in self.grades.values():
             total_sum += sum(course_grades)
             total_count += len(course_grades)
-        self.average_grade = total_sum / total_count if total_count > 0 else 0
+        self.average_grade = (
+            total_sum / total_count if total_count > 0 else 0
+        )
 
 
 class Reviewer(Mentor):
@@ -85,9 +88,21 @@ class Student:
         self.average_grade = 0
 
     def __str__(self):
-        courses_in_progress_str = ', '.join(self.courses_in_progress) if self.courses_in_progress else "Нет"
-        finished_courses_str = ', '.join(self.finished_courses) if self.finished_courses else "Нет"
-        return f"Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: {self.average_grade:.1f}\nКурсы в процессе изучения: {courses_in_progress_str}\nЗавершенные курсы: {finished_courses_str}"
+        courses_in_progress_str = (
+            ', '.join(self.courses_in_progress)
+            if self.courses_in_progress else "Нет"
+        )
+        finished_courses_str = (
+            ', '.join(self.finished_courses)
+            if self.finished_courses else "Нет"
+        )
+        return (
+            f"Имя: {self.name}\nФамилия: {self.surname}\n"
+            f"Средняя оценка за домашние задания: "
+            f"{self.average_grade:.1f}\nКурсы в процессе изучения: "
+            f"{courses_in_progress_str}\nЗавершенные курсы: "
+            f"{finished_courses_str}"
+        )
 
     def __lt__(self, other):
         if isinstance(other, Student):
@@ -143,7 +158,9 @@ class Student:
         for course_grades in self.grades.values():
             total_sum += sum(course_grades)
             total_count += len(course_grades)
-        self.average_grade = total_sum / total_count if total_count > 0 else 0
+        self.average_grade = (
+            total_sum / total_count if total_count > 0 else 0
+        )
 
 
 def average_hw_grade(students, course):
@@ -189,78 +206,76 @@ if __name__ == "__main__":
     student2.courses_in_progress += ['Python', 'Java']
     student2.finished_courses += ['Алгоритмы']
 
-    print("\nЗадание №1:")
-    print(f"lecturer1 - экземпляр Mentor: {isinstance(lecturer1, Mentor)}")
-    print(f"reviewer1 - экземпляр Mentor: {isinstance(reviewer1, Mentor)}")
-    print(f"lecturer1.courses_attached: {lecturer1.courses_attached}")
-    print(f"reviewer1.courses_attached: {reviewer1.courses_attached}")
+print("\nЗадание №1:")
+print(f"\nlecturer1 - экземпляр Mentor: {isinstance(lecturer1, Mentor)}")
+print(f"reviewer1 - экземпляр Mentor: {isinstance(reviewer1, Mentor)}")
+print(f"lecturer1.courses_attached: {lecturer1.courses_attached}")
+print(f"reviewer1.courses_attached: {reviewer1.courses_attached}")
 
-    print("\nЗадание №2:")
+print("\nЗадание №2:")
+print("\nПроверяющий выставляет оценки студентам:")
+reviewer1.rate_hw(student1, 'Python', 9)
+reviewer1.rate_hw(student1, 'Python', 8)
+reviewer1.rate_hw(student1, 'Git', 10)
+reviewer1.rate_hw(student2, 'Python', 7)
 
-    print("\nПроверяющий выставляет оценки студентам:")
-    reviewer1.rate_hw(student1, 'Python', 9)
-    reviewer1.rate_hw(student1, 'Python', 8)
-    reviewer1.rate_hw(student1, 'Git', 10)
-    reviewer1.rate_hw(student2, 'Python', 7)
+print("\nСтуденты оценивают лекции:")
+student1.rate_lecture(lecturer1, 'Python', 9)
+student1.rate_lecture(lecturer1, 'Python', 8)
+student2.rate_lecture(lecturer1, 'Python', 10)
+student2.rate_lecture(lecturer2, 'Python', 8)
 
-    print("\nСтуденты оценивают лекции:")
-    student1.rate_lecture(lecturer1, 'Python', 9)
-    student1.rate_lecture(lecturer1, 'Python', 8)
-    student2.rate_lecture(lecturer1, 'Python', 10)
-    student2.rate_lecture(lecturer2, 'Python', 8)
+print("\nПроверка обработки ошибок:")
+student1.rate_lecture(lecturer1, 'Java', 8)
+student1.rate_lecture(lecturer1, 'C++', 8)
+student1.rate_lecture(reviewer1, 'Python', 6)
 
-    print("\nПроверка обработки ошибок:")
-    student1.rate_lecture(lecturer1, 'Java', 8)
-    student1.rate_lecture(lecturer1, 'C++', 8)
-    student1.rate_lecture(reviewer1, 'Python', 6)
+print("\nЗадание №3:")
+print("\nИнформация о проверяющем:")
+print(reviewer1)
 
-    print("\nЗадание №3:")
-    print("\nИнформация о проверяющем:")
-    print(reviewer1)
+print("\nИнформация о лекторе:")
+print(lecturer1)
 
-    print("\nИнформация о лекторе:")
-    print(lecturer1)
+print("\nИнформация о студенте:")
+print(student1)
 
-    print("\nИнформация о студенте:")
-    print(student1)  # ИСПРАВЛЕНО
+print("\nСравнение студентов по средней оценке:")
+student1.calculate_average_grade()
+student2.calculate_average_grade()
+print(f"student1 > student2: {student1 > student2}")
+print(f"student1 < student2: {student1 < student2}")
+print(f"student1 == student2: {student1 == student2}")
 
-    print("\nСравнение студентов по средней оценке:")
-    student1.calculate_average_grade()
-    student2.calculate_average_grade()
-    print(f"student1 > student2: {student1 > student2}")
-    print(f"student1 < student2: {student1 < student2}")
-    print(f"student1 == student2: {student1 == student2}")
+print("\nСравнение лекторов по средней оценке:")
+lecturer1.calculate_average_grade()
+lecturer2.calculate_average_grade()
+print(f"lecturer1 > lecturer2: {lecturer1 > lecturer2}")
+print(f"lecturer1 < lecturer2: {lecturer1 < lecturer2}")
+print(f"lecturer1 == lecturer2: {lecturer1 == lecturer2}")
 
-    print("\nСравнение лекторов по средней оценке:")
-    lecturer1.calculate_average_grade()
-    lecturer2.calculate_average_grade()
-    print(f"lecturer1 > lecturer2: {lecturer1 > lecturer2}")
-    print(f"lecturer1 < lecturer2: {lecturer1 < lecturer2}")
-    print(f"lecturer1 == lecturer2: {lecturer1 == lecturer2}")
+print("\nЗадание №4:")
+students_list = [student1, student2]
+lecturers_list = [lecturer1, lecturer2]
 
-    print("\nЗадание №4:")
+avg_hw_python = average_hw_grade(students_list, 'Python')
+avg_lecture_python = average_lecture_grade(lecturers_list, 'Python')
 
-    students_list = [student1, student2]
-    lecturers_list = [lecturer1, lecturer2]
+print(f"\nСредняя оценка за ДЗ по курсу 'Python': {avg_hw_python:.1f}")
+print(f"Средняя оценка за лекции по курсу 'Python': {avg_lecture_python:.1f}")
 
-    avg_hw_python = average_hw_grade(students_list, 'Python')
-    avg_lecture_python = average_lecture_grade(lecturers_list, 'Python')
+print("\nПроверка всех созданных объектов:")
+print("\nВсе лекторы:")
+for idx, lect in enumerate([lecturer1, lecturer2], 1):
+    print(f"\nЛектор {idx}:")
+    print(lect)
 
-    print(f"Средняя оценка за ДЗ по курсу 'Python': {avg_hw_python:.1f}")
-    print(f"Средняя оценка за лекции по курсу 'Python': {avg_lecture_python:.1f}")
+print("\nВсе проверяющие:")
+for idx, rev in enumerate([reviewer1, reviewer2], 1):
+    print(f"\nПроверяющий {idx}:")
+    print(rev)
 
-    print("\n5. Проверка всех созданных объектов:")
-    print("\nВсе лекторы:")
-    for idx, lect in enumerate([lecturer1, lecturer2], 1):
-        print(f"\nЛектор {idx}:")
-        print(lect)
-
-    print("\nВсе проверяющие:")
-    for idx, rev in enumerate([reviewer1, reviewer2], 1):
-        print(f"\nПроверяющий {idx}:")
-        print(rev)
-
-    print("\nВсе студенты:")
-    for idx, stud in enumerate([student1, student2], 1):
-        print(f"\nСтудент {idx}:")
-        print(stud)
+print("\nВсе студенты:")
+for idx, stud in enumerate([student1, student2], 1):
+    print(f"\nСтудент {idx}:")
+    print(stud)
